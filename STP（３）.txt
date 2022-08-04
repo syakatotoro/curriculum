@@ -1,0 +1,50 @@
+・ルートブリッジを決める
+
+　・Switch1：32769
+　・Switch2：20481
+　・Switch3：4097 ←ルートブリッジ
+　・Switch4：8193
+
+・ルートブリッジのポートは確定で指定ポートになる
+
+　・Switch3：E0/1→DP　E0/2→DP
+
+・各セグメントにルートパスコストをふる
+
+　・Switch1→Switch2　：　19
+　・Switch2→Switch4　：　100
+　・Switch4→Switch3　：　100
+　・Switch3→Switch1　：　100
+
+・各Switchごとにルートポートを決める
+（各Switchにルートポートは一つ。/ルートパスコストが少ない方が優先される。/ルートパスコストが同じときはブリッジプライオリティが小さい方が優先される。）
+
+　・Switch1：F0/1→？　F0/2→RP
+　・Switch2：F0/1→RP　F0/2→？
+　・Switch3：E0/1→DP　E0/2→DP
+　・Switch4：E0/1→？　E0/2→RP
+
+・ルートポートの対向ポートが指定ポートとなる
+
+　・Switch1：F0/1→DP　F0/2→RP
+　・Switch2：F0/1→RP　F0/2→？
+　・Switch3：E0/1→DP　E0/2→DP
+　・Switch4：E0/1→？　E0/2→RP
+
+・残ったポートで指定ポートと非指定ポートを決める
+
+　◦順序
+　1.該当ポートからのルートパスコストの小さいほう
+　2.ブリッジプライオリティの小さいほう
+　3.MACアドレスの小さいほう
+
+　1.
+　・Switch2：F0/2→ 100 + 100＝200→DP
+　・Switch4：E0/1→100+19+100＝219→BP（NDP）
+
+・結果
+
+　・Switch1：F0/1→DP　F0/2→RP
+　・Switch2：F0/1→RP　F0/2→DP
+　・Switch3：E0/1→DP　E0/2→DP
+　・Switch4：E0/1→BP　E0/2→RP
